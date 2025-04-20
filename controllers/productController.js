@@ -3,7 +3,7 @@ import { isAdmin } from "./userController.js";
 
 export async function getProducts(req, res) {
     try{
-        if(isAsmin(req)){
+        if(isAdmin(req)){
             const products = await Product.find()
             res.json(products)
         }else{

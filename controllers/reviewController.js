@@ -1,10 +1,10 @@
-import ReviewModel from '../models/reviewModel.js';
+import reviewModel from "../models/review/reviewModel.js";
 
 // Create a new review
 export const createReview = async (req, res) => {
     try {
         const reviewData = req.body;
-        const newReview = new ReviewModel(reviewData);
+        const newReview = new reviewModel(reviewData);
         await newReview.save();
         res.status(201).json({ message: 'Review created successfully', review: newReview });
     } catch (error) {
@@ -17,7 +17,7 @@ export const getReviews = async (req, res) => {
     try {
         const { productId } = req.query;
         const filter = productId ? { productId } : {};
-        const reviews = await ReviewModel.find(filter);
+        const reviews = await reviewModel.find(filter);
         res.status(200).json(reviews);
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch reviews', error: error.message });
@@ -27,7 +27,7 @@ export const getReviews = async (req, res) => {
 // Get a single review by ID
 export const getReviewById = async (req, res) => {
     try {
-        const review = await ReviewModel.findById(req.params.id);
+        const review = await reviewModel.findById(req.params.id);
         if (!review) {
             return res.status(404).json({ message: 'Review not found' });
         }
@@ -40,7 +40,7 @@ export const getReviewById = async (req, res) => {
 // Update a review
 export const updateReview = async (req, res) => {
     try {
-        const updatedReview = await ReviewModel.findByIdAndUpdate(req.params.id, req.body, {
+        const updatedReview = await reviewModel.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true,
         });
@@ -57,7 +57,7 @@ export const updateReview = async (req, res) => {
 export const toggleReviewVisibility = async (req, res) => {
     try {
         const { id } = req.params;
-        const review = await ReviewModel.findById(id);
+        const review = await reviewModel.findById(id);
         if (!review) {
             return res.status(404).json({ message: 'Review not found' });
         }
@@ -77,7 +77,7 @@ export const toggleReviewVisibility = async (req, res) => {
 // Delete a review
 export const deleteReview = async (req, res) => {
     try {
-        const deletedReview = await ReviewModel.findByIdAndDelete(req.params.id);
+        const deletedReview = await reviewModel.findByIdAndDelete(req.params.id);
         if (!deletedReview) {
             return res.status(404).json({ message: 'Review not found' });
         }
